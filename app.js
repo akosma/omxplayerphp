@@ -37,8 +37,10 @@
 // as if the user was typing those commands on the command line.
 //
 
+// Main namespace object of this application
 var MoviePlayer = function () {
 
+    // This function is used for read-only operations
     var readApi = function (method, callback) {
         $.ajax('api.php?method=' + method, {
             dataType: "json",
@@ -48,12 +50,14 @@ var MoviePlayer = function () {
         });
     };
 
+    // Function used for read-write operations
     var writeApi = function (method, param) {
         $.ajax('api.php?method=' + method + '&value=' + param, {
             dataType: "json"
         });
     };
 
+    // Public interface
     return {
         playMovie: function (movieName) {
             writeApi('play', movieName);
@@ -85,53 +89,12 @@ var MoviePlayer = function () {
     };
 } ();
 
+// pageinit event handlers, where we set 
+// event handlers for all the buttons in the UI
 $(document).on('pageinit', '#main', function() {
     $('input[name="sound"]').change(function (event) {
         var value = $(this).val();
         MoviePlayer.setSound(value);
-    });
-});
-
-$(document).on('pagebeforeshow', '#main', function() {
-    MoviePlayer.getCurrentSound(function (sound) {
-        if (sound === 'local') {
-            $('#localaudio').attr('checked', 'checked');
-            $('#hdmiaudio').removeAttr('checked');
-        }
-        else if (sound === 'hdmi') {
-            $('#localaudio').removeAttr('checked');
-            $('#hdmiaudio').attr('checked', 'checked');
-        }
-        $('#localaudio').checkboxradio("refresh");
-        $('#hdmiaudio').checkboxradio("refresh");
-    });
-    
-    MoviePlayer.getAvailableDiskSpace(function (disk) {
-        $('#diskSpaceLabel').html('Available ' + disk + 'GB');
-    });
-    
-    MoviePlayer.getMovieList(function (movies) {
-        var createTapHandler = function(movie) {
-            return function (event, data) {
-                MoviePlayer.playMovie(movie);
-            };
-        };
-        var list = $('#movieList');
-        list.empty();
-        for (var index = 0, length = movies.length; index < length; ++index) {
-            var movie = movies[index];
-            
-            var playLink = $('<a>');
-            playLink.attr('href', '#detail');
-            playLink.attr('data-transition', 'slide');
-            playLink.bind('tap', createTapHandler(movie));
-            playLink.append(movie);
-
-            var newLi = $('<li>');
-            newLi.append(playLink);
-            list.append(newLi);
-        }
-        list.listview('refresh');
     });
 });
 
@@ -150,17 +113,83 @@ $(document).on('pageinit', '#detail', function () {
     }
 });
 
-$(document).on('pagebeforeshow', '#detail', function() {
-    setTimeout(function () {
-        MoviePlayer.getCurrentMovie(function (movieName) {
-            $('#movieName').html(movieName);
-        });
-    }, 500);
-});
-
 $(document).on('pageinit', '#confirm', function () {
     $('#stopButton').click(function (event) {
         MoviePlayer.sendCommand('stop');
         $.mobile.navigate('#main');
     });
+});
+
+// pagebeforeshow events, where we update the UI depending
+// on the state of the backend API
+$(document).on('pagebeforeshow', '#main', function() {
+
+    // We check to see whether a movie is playing. This is
+    // required since the application might be closed by the user,
+    // and when relaunched, we want to display the controls for the
+    // movie instead of the movie list.
+    setTimeout(function () {
+        MoviePlayer.getCurrentMovie(function (movieName) {
+            if (movieName === '') {
+                MoviePlayer.getCurrentSound(function (sound) {
+                    if (sound === 'local') {
+                        $('#localaudio').attr('checked', 'checked');
+                        $('#hdmiaudio').removeAttr('checked');
+                    }
+                    else if (sound === 'hdmi') {
+                        $('#localaudio').removeAttr('checked');
+                        $('#hdmiaudio').attr('checked', 'checked');
+                    }
+                    $('#localaudio').checkboxradio("refresh");
+                    $('#hdmiaudio').checkboxradio("refresh");
+                });
+                
+                MoviePlayer.getAvailableDiskSpace(function (disk) {
+                    $('#diskSpaceLabel').html('Available ' + disk + 'GB');
+                });
+                
+                MoviePlayer.getMovieList(function (movies) {
+                    var createTapHandler = function(movie) {
+                        return function (event, data) {
+                            MoviePlayer.playMovie(movie);
+                        };
+                    };
+                    var list = $('#movieList');
+                    list.empty();
+                    for (var index = 0, length = movies.length; index < length; ++index) {
+                        var movie = movies[index];
+                        
+                        var playLink = $('<a>');
+                        playLink.attr('href', '#detail');
+                        playLink.attr('data-transition', 'slide');
+                        playLink.bind('tap', createTapHandler(movie));
+                        playLink.append(movie);
+            
+                        var newLi = $('<li>');
+                        newLi.append(playLink);
+                        list.append(newLi);
+                    }
+                    list.listview('refresh');
+                });
+            }
+            else {
+                $.mobile.navigate('#detail');
+            }
+        });
+    }, 500);
+});
+
+$(document).on('pagebeforeshow', '#detail', function() {
+    // Here we timeout because the name of the movie
+    // might be available a little while later
+    setTimeout(function () {
+        MoviePlayer.getCurrentMovie(function (movieName) {
+            if (movieName === '') {
+                $.mobile.navigate('#main');
+            }
+            else {
+                $('#movieName').html(movieName);
+            }
+        });
+    }, 500);
 });
