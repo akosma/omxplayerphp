@@ -6,6 +6,9 @@ a Raspberry Pi computer, using lighttpd as a web server and the PHP
 package. It displays a mobile-friendly user interface, so that you can
 use your smartphone to control the playback.
 
+This is an evolution of this gist:
+https://gist.github.com/akosma/7061190
+
 Installation
 ------------
 
