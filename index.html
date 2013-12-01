@@ -31,27 +31,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-title" content="Movies">
 
     <title>Movies</title>
     <link rel="apple-touch-icon" href="movies.png">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <link rel="stylesheet" href="jqm/jqm.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="jqm/jquery.js"></script>
+    <script src="jqm/jqm.js"></script>
     <script src="app.js"></script>
 </head>
 
 <body>
 
-    <div data-role="page" data-theme="b" id="main">
+    <div data-role="page" data-theme="c" id="main">
         <div data-role="header" data-position="fixed">
             <h1>Available Movies</h1>
         </div>
 
         <div data-role="content">
-            <ul data-role="listview" id="movieList"></ul>
+            <ul data-role="listview" id="movieList" data-autodividers="true"
+				data-filter="true" data-filter-placeholder="Filter movies..."></ul>
             <h4 align="center" id="diskSpaceLabel"></h4>
         </div>
 
@@ -65,7 +68,7 @@
         </div>
     </div>
 
-    <div data-role="page" data-theme="b" id="detail">
+    <div data-role="page" data-theme="c" id="detail">
         <div data-role="header" data-position="fixed">
             <h1 id="movieName"></h1>
         </div>
@@ -116,7 +119,7 @@
         </div>
     </div>
 
-    <div data-role="page" id="confirm">
+    <div data-role="page" data-theme="c" id="confirm">
         <div data-role="header">
             <h1>Are you sure?</h1>
         </div>

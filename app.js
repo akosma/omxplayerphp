@@ -131,7 +131,7 @@ $(document).on('pagebeforeshow', '#main', function() {
                 });
                 
                 MoviePlayer.getAvailableDiskSpace(function (disk) {
-                    $('#diskSpaceLabel').html('Available ' + disk + 'GB');
+                    $('#diskSpaceLabel').html('Available disk space: ' + disk + ' GB');
                 });
                 
                 MoviePlayer.getMovieList(function (movies) {
