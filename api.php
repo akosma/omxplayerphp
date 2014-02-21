@@ -42,7 +42,7 @@ function get_available_disk_space() {
 }
 
 function get_current_movie_name() {
-    return basename(`ps -eo args | grep /usr/bin/omxplayer | grep -v grep | grep -v bash | awk '{print $4}'`);
+    return basename(`ps -eo args | grep /usr/bin/omxplayer | grep -v grep | grep -v bash`);
 }
 
 function get_current_PID() {
@@ -64,7 +64,7 @@ function load_sound_setting($sound_setting_file) {
 }
 
 function start_movie_playback($movie, $basedir, $pipe, $sound) {
-    $output = "omxplayer -o $sound $basedir/$movie <$pipe &";
+    $output = "omxplayer -o $sound \"$basedir/$movie\" <$pipe &";
 
     $descriptorspec = array(
         0 => array("pipe", "r"),  // stdin
@@ -147,7 +147,7 @@ else if ($method === "play") {
     else {
     	$response = [ 
     		"method" => "error",
-    		"response" => "Please specify a valid movie name as the 'value' parameter"
+    		"response" => "Please specify a valid movie name as the 'value' parameter (received '$movie')"
     	];
     }
 }

@@ -38,7 +38,7 @@ var MoviePlayer = function () {
 
     // Function used for read-write operations
     var writeApi = function (method, param) {
-        $.ajax('api.php?method=' + method + '&value=' + param, {
+        $.ajax('api.php?method=' + method + '&value=' + escape(param), {
             dataType: "json"
         });
     };
