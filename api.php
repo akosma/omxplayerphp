@@ -49,6 +49,10 @@ function get_current_PID() {
     return `ps -eaf | grep /usr/bin/omxplayer | grep -v grep | grep -v bash | awk '{print $2}'`;
 }
 
+function delete_movie($movie, $basedir) {
+    unlink("$basedir/$movie");
+}
+
 function save_sound_setting($sound, $sound_setting_file) {
     // Of course, this requires "write" permissions on the current folder!
     $out = `echo '$sound' > $sound_setting_file`;
@@ -151,6 +155,23 @@ else if ($method === "play") {
     	];
     }
 }
+else if ($method === "delete") {
+    $movie = $_GET["value"];
+    $movies = get_movie_list($basedir);
+    if ($movie && in_array($movie, $movies)) {
+        delete_movie($movie, $basedir);
+    	$response = [ 
+    		"method" => $method,
+    		"response" => $movie
+    	];
+    }
+    else {
+    	$response = [ 
+    		"method" => "error",
+    		"response" => "Please specify a valid movie name as the 'value' parameter (received '$movie')"
+    	];
+    }
+}
 else if ($method === "command") {
     $pid = get_current_PID();
     if ($pid) {
@@ -197,7 +218,7 @@ else {
 	$response = [ 
 		"method" => "error",
 		"response" => "Please specify a valid method name to execute",
-		"help" => "Valid methods are: 'movies', 'disk', 'current_movie', 'sound', 'set_sound', 'play' and 'command.'"
+		"help" => "Valid methods are: 'movies', 'disk', 'current_movie', 'sound', 'set_sound', 'play', 'delete' and 'command.'"
 	];
 }
 echo json_encode($response);	

@@ -54,7 +54,8 @@
 
         <div data-role="content">
             <ul data-role="listview" id="movieList" data-autodividers="true"
-				data-filter="true" data-filter-placeholder="Filter movies..."></ul>
+				data-filter="true" data-split-icon="delete" 
+				data-filter-placeholder="Filter movies..."></ul>
             <h4 align="center" id="diskSpaceLabel"></h4>
         </div>
 
@@ -128,6 +129,18 @@
             <a data-role="button" data-rel="back">No</a> 
             <a data-role="button" data-ajax="false" 
             id="stopButton">Yes</a>
+        </div>
+    </div>
+
+    <div data-role="page" data-theme="c" id="confirmDeletion">
+        <div data-role="header">
+            <h1>Are you sure?</h1>
+        </div>
+
+        <div data-role="content">
+            <a data-role="button" data-rel="back">No</a> 
+            <a data-role="button" data-ajax="false" 
+            id="deleteButton">Yes</a>
         </div>
     </div>
 

@@ -26,6 +26,10 @@
 // Main namespace object of this application
 var MoviePlayer = function () {
 
+    // This variable stores the value of the movie 
+    // that has been selected for deletion by the user
+    var movieToDelete = null;
+
     // This function is used for read-only operations
     var readApi = function (method, callback) {
         $.ajax('api.php?method=' + method, {
@@ -71,6 +75,21 @@ var MoviePlayer = function () {
         
         getCurrentSound: function (callback) {
             readApi("sound", callback);
+        },
+        
+        setMovieToDelete: function (movie) {
+            if (movie) {
+                movieToDelete = movie;
+                $.mobile.changePage('#confirmDeletion', { role: 'dialog' });
+            }
+        },
+        
+        deleteSelectedMovie: function () {
+            if (movieToDelete) {
+                writeApi('delete', movieToDelete);
+                movieToDelete = null;
+                $.mobile.navigate('#main');
+            }
         }
     };
 } ();
@@ -102,6 +121,13 @@ $(document).on('pageinit', '#detail', function () {
 $(document).on('pageinit', '#confirm', function () {
     $('#stopButton').click(function (event) {
         MoviePlayer.sendCommand('stop');
+        $.mobile.navigate('#main');
+    });
+});
+
+$(document).on('pageinit', '#confirmDeletion', function () {
+    $('#deleteButton').click(function (event) {
+        MoviePlayer.deleteSelectedMovie();
         $.mobile.navigate('#main');
     });
 });
@@ -140,6 +166,11 @@ $(document).on('pagebeforeshow', '#main', function() {
                             MoviePlayer.playMovie(movie);
                         };
                     };
+                    var createAccessoryHandler = function(movie) {
+                        return function (event, data) {
+                            MoviePlayer.setMovieToDelete(movie);
+                        };
+                    };
                     var list = $('#movieList');
                     list.empty();
                     for (var index = 0, length = movies.length; index < length; ++index) {
@@ -151,8 +182,12 @@ $(document).on('pagebeforeshow', '#main', function() {
                         playLink.bind('tap', createTapHandler(movie));
                         playLink.append(movie);
             
+                        var deleteLink = $('<a>');
+                        deleteLink.bind('tap', createAccessoryHandler(movie));
+            
                         var newLi = $('<li>');
                         newLi.append(playLink);
+                        newLi.append(deleteLink);
                         list.append(newLi);
                     }
                     list.listview('refresh');
