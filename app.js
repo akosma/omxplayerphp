@@ -130,6 +130,9 @@ $(document).on('pageinit', '#confirmDeletion', function () {
         MoviePlayer.deleteSelectedMovie();
         $.mobile.navigate('#main');
     });
+    $('#cancelDeleteButton').click(function (event) {
+        $.mobile.navigate('#main');
+    });
 });
 
 // pagebeforeshow events, where we update the UI depending
