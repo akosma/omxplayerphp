@@ -84,6 +84,10 @@ var MoviePlayer = function () {
             }
         },
         
+        getMovieToDelete: function () {
+            return movieToDelete;
+        },
+        
         deleteSelectedMovie: function () {
             if (movieToDelete) {
                 writeApi('delete', movieToDelete);
@@ -133,6 +137,11 @@ $(document).on('pageinit', '#confirmDeletion', function () {
     $('#cancelDeleteButton').click(function (event) {
         $.mobile.navigate('#main');
     });
+});
+
+$(document).on('pagebeforeshow', '#confirmDeletion', function () {
+    var movie = MoviePlayer.getMovieToDelete();
+    $('#movieToDelete').text(movie);
 });
 
 // pagebeforeshow events, where we update the UI depending
