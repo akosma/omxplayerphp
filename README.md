@@ -4,10 +4,7 @@ Driving omxplayer through PHP on a Raspberry Pi
 This script allows to start and stop the playback of a list of movies in
 a Raspberry Pi computer, using lighttpd as a web server and the PHP
 package. It displays a mobile-friendly user interface, so that you can
-use your smartphone to control the playback.
-
-This is an evolution of this gist:
-https://gist.github.com/akosma/7061190
+use your smartphone or tablet to control the playback.
 
 Installation
 ------------
