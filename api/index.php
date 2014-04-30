@@ -175,3 +175,5 @@ $app->post('/delete/:movie',   $post_delete_movie);
 $app->post('/command/:action', $post_command_action);
 $app->run();
 
+?>
+
