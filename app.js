@@ -26,14 +26,14 @@
 // Main namespace object of this application
 var MoviePlayer = function () {
 
-    // This variable stores the value of the movie 
+    // This variable stores the value of the movie
     // that has been selected for deletion by the user
     var movieToDelete = null;
 
     // This function is used for read-only operations
     var readApi = function (method, callback) {
-        $.ajax('api.php?method=' + method, {
-            dataType: "json",
+        $.ajax('api/index.php/' + method, {
+            dataType: 'json',
             success: function (obj) {
                 callback(obj.response);
             }
@@ -42,8 +42,9 @@ var MoviePlayer = function () {
 
     // Function used for read-write operations
     var writeApi = function (method, param) {
-        $.ajax('api.php?method=' + method + '&value=' + escape(param), {
-            dataType: "json"
+        $.ajax('api/index.php/' + method + '/' + escape(param), {
+            type: 'POST',
+            dataType: 'json'
         });
     };
 
@@ -52,42 +53,42 @@ var MoviePlayer = function () {
         playMovie: function (movieName) {
             writeApi('play', movieName);
         },
-        
+
         sendCommand: function (command) {
             writeApi('command', command);
         },
-        
+
         setSound: function (sound) {
-            writeApi('set_sound', sound);
+            writeApi('sound', sound);
         },
-        
+
         getMovieList: function (callback) {
             readApi("movies", callback);
         },
-        
+
         getCurrentMovie: function (callback) {
             readApi("current_movie", callback);
         },
-        
+
         getAvailableDiskSpace: function (callback) {
             readApi("disk", callback);
         },
-        
+
         getCurrentSound: function (callback) {
             readApi("sound", callback);
         },
-        
+
         setMovieToDelete: function (movie) {
             if (movie) {
                 movieToDelete = movie;
                 $.mobile.changePage('#confirmDeletion', { role: 'dialog' });
             }
         },
-        
+
         getMovieToDelete: function () {
             return movieToDelete;
         },
-        
+
         deleteSelectedMovie: function () {
             if (movieToDelete) {
                 writeApi('delete', movieToDelete);
@@ -98,7 +99,7 @@ var MoviePlayer = function () {
     };
 } ();
 
-// pageinit event handlers, where we set 
+// pageinit event handlers, where we set
 // event handlers for all the buttons in the UI
 $(document).on('pageinit', '#main', function() {
     $('input[name="sound"]').change(function (event) {
@@ -108,7 +109,7 @@ $(document).on('pageinit', '#main', function() {
 });
 
 $(document).on('pageinit', '#detail', function () {
-    var commands = ['pause', 'volup', 'voldown', 'backward', 'forward', 
+    var commands = ['pause', 'volup', 'voldown', 'backward', 'forward',
                     'backward10', 'forward10', 'slower', 'faster', 'info'];
     var createCommandHandler = function(command) {
         return function (event) {
@@ -167,11 +168,11 @@ $(document).on('pagebeforeshow', '#main', function() {
                     $('#localaudio').checkboxradio("refresh");
                     $('#hdmiaudio').checkboxradio("refresh");
                 });
-                
+
                 MoviePlayer.getAvailableDiskSpace(function (disk) {
                     $('#diskSpaceLabel').html('Available disk space: ' + disk + ' GB');
                 });
-                
+
                 MoviePlayer.getMovieList(function (movies) {
                     var createTapHandler = function(movie) {
                         return function (event, data) {
@@ -187,16 +188,16 @@ $(document).on('pagebeforeshow', '#main', function() {
                     list.empty();
                     for (var index = 0, length = movies.length; index < length; ++index) {
                         var movie = movies[index];
-                        
+
                         var playLink = $('<a>');
                         playLink.attr('href', '#detail');
                         playLink.attr('data-transition', 'slide');
                         playLink.bind('tap', createTapHandler(movie));
                         playLink.append(movie);
-            
+
                         var deleteLink = $('<a>');
                         deleteLink.bind('tap', createAccessoryHandler(movie));
-            
+
                         var newLi = $('<li>');
                         newLi.append(playLink);
                         newLi.append(deleteLink);
@@ -226,3 +227,4 @@ $(document).on('pagebeforeshow', '#detail', function() {
         });
     }, 500);
 });
+

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 35
+# version 37
 
 CACHE:
 index.html
@@ -16,4 +16,5 @@ jqm/images/icons-36-black.png
 jqm/images/icons-36-white.png
 
 NETWORK:
-api.php
+api/index.php
+
