@@ -128,6 +128,9 @@ $(document).on('pageinit', '#confirm', function () {
         MoviePlayer.sendCommand('stop');
         $.mobile.navigate('#main');
     });
+    $('#cancelStopButton').click(function (event) {
+        $.mobile.navigate('#detail');
+    });
 });
 
 $(document).on('pageinit', '#confirmDeletion', function () {
@@ -143,6 +146,12 @@ $(document).on('pageinit', '#confirmDeletion', function () {
 $(document).on('pagebeforeshow', '#confirmDeletion', function () {
     var movie = MoviePlayer.getMovieToDelete();
     $('#movieToDelete').text(movie);
+});
+
+$(document).on('pagebeforeshow', '#detail', function () {
+    MoviePlayer.getAvailableDiskSpace(function (disk) {
+        $('#diskSpaceLabelAgain').html('Available disk space: ' + disk + ' GB');
+    });
 });
 
 // pagebeforeshow events, where we update the UI depending
