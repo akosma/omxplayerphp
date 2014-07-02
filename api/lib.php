@@ -38,7 +38,7 @@ function get_movie_list($basedir) {
 }
 
 function get_available_disk_space() {
-    return intval(`df -h | grep rootfs | awk '{print \$4}'`);
+    return intval(`df -h | grep /dev/sda2 | awk '{print \$4}'`);
 }
 
 function get_current_movie_name() {
