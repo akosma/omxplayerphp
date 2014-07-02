@@ -28,12 +28,12 @@ function get_movie_list($basedir) {
     $movies = array();
     $d = dir($basedir);
     while (false !== ($entry = $d->read())) {
-        if ($entry !== "." && $entry !== "..") {
+        if ($entry !== "." && $entry !== ".." && $entry !== ".DS_Store") {
             $movies[] = $entry;
         }
     }
     $d->close();
-    sort($movies);
+    sort($movies, SORT_FLAG_CASE | SORT_NATURAL);
     return $movies;
 }
 
