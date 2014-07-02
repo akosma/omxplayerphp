@@ -204,12 +204,8 @@ $(document).on('pagebeforeshow', '#main', function() {
                         playLink.bind('tap', createTapHandler(movie));
                         playLink.append(movie);
 
-                        var deleteLink = $('<a>');
-                        deleteLink.bind('tap', createAccessoryHandler(movie));
-
                         var newLi = $('<li>');
                         newLi.append(playLink);
-                        newLi.append(deleteLink);
                         list.append(newLi);
                     }
                     list.listview('refresh');
