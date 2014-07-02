@@ -105,24 +105,6 @@ $post_play_movie = function ($movie) use ($basedir, $sound_setting_file, $pipe) 
     echo json_encode($response);
 };
 
-$post_delete_movie = function ($movie) use ($basedir) {
-    $movies = get_movie_list($basedir);
-    if ($movie && in_array($movie, $movies)) {
-        delete_movie($movie, $basedir);
-        $response = [
-            "method" => "delete",
-            "response" => $movie
-        ];
-    }
-    else {
-        $response = [
-            "method" => "error",
-            "response" => "Please specify a valid movie name as the 'value' parameter (received '$movie')"
-        ];
-    }
-    echo json_encode($response);
-};
-
 $post_command_action = function ($action) use ($pipe, $sound_setting_file) {
     $pid = get_current_PID();
     if ($pid) {
@@ -171,7 +153,6 @@ $app->get('/current_movie',    $get_current_movie);
 $app->get('/sound',            $get_sound);
 $app->post('/sound/:sound',    $post_sound);
 $app->post('/play/:movie',     $post_play_movie);
-$app->post('/delete/:movie',   $post_delete_movie);
 $app->post('/command/:action', $post_command_action);
 $app->run();
 

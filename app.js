@@ -26,10 +26,6 @@
 // Main namespace object of this application
 var MoviePlayer = function () {
 
-    // This variable stores the value of the movie
-    // that has been selected for deletion by the user
-    var movieToDelete = null;
-
     // This function is used for read-only operations
     var readApi = function (method, callback) {
         $.ajax('api/index.php/' + method, {
@@ -76,25 +72,6 @@ var MoviePlayer = function () {
 
         getCurrentSound: function (callback) {
             readApi("sound", callback);
-        },
-
-        setMovieToDelete: function (movie) {
-            if (movie) {
-                movieToDelete = movie;
-                $.mobile.changePage('#confirmDeletion', { role: 'dialog' });
-            }
-        },
-
-        getMovieToDelete: function () {
-            return movieToDelete;
-        },
-
-        deleteSelectedMovie: function () {
-            if (movieToDelete) {
-                writeApi('delete', movieToDelete);
-                movieToDelete = null;
-                $.mobile.navigate('#main');
-            }
         }
     };
 } ();
@@ -131,21 +108,6 @@ $(document).on('pageinit', '#confirm', function () {
     $('#cancelStopButton').click(function (event) {
         $.mobile.navigate('#detail');
     });
-});
-
-$(document).on('pageinit', '#confirmDeletion', function () {
-    $('#deleteButton').click(function (event) {
-        MoviePlayer.deleteSelectedMovie();
-        $.mobile.navigate('#main');
-    });
-    $('#cancelDeleteButton').click(function (event) {
-        $.mobile.navigate('#main');
-    });
-});
-
-$(document).on('pagebeforeshow', '#confirmDeletion', function () {
-    var movie = MoviePlayer.getMovieToDelete();
-    $('#movieToDelete').text(movie);
 });
 
 $(document).on('pagebeforeshow', '#detail', function () {
@@ -186,11 +148,6 @@ $(document).on('pagebeforeshow', '#main', function() {
                     var createTapHandler = function(movie) {
                         return function (event, data) {
                             MoviePlayer.playMovie(movie);
-                        };
-                    };
-                    var createAccessoryHandler = function(movie) {
-                        return function (event, data) {
-                            MoviePlayer.setMovieToDelete(movie);
                         };
                     };
                     var list = $('#movieList');

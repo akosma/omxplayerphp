@@ -49,10 +49,6 @@ function get_current_PID() {
     return `ps -eaf | grep /usr/bin/omxplayer | grep -v grep | grep -v bash | awk '{print $2}'`;
 }
 
-function delete_movie($movie, $basedir) {
-    unlink("$basedir/$movie");
-}
-
 function save_sound_setting($sound, $sound_setting_file) {
     // Of course, this requires "write" permissions on the current folder!
     $out = `echo '$sound' > $sound_setting_file`;
