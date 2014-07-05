@@ -156,5 +156,3 @@ $app->post('/play/:movie',     $post_play_movie);
 $app->post('/command/:action', $post_command_action);
 $app->run();
 
-?>
-

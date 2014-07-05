@@ -24,12 +24,19 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
+function ends_with($haystack, $needle) {
+    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+}
+
 function get_movie_list($basedir) {
     $movies = array();
     $d = dir($basedir);
     while (false !== ($entry = $d->read())) {
-        if ($entry !== "." && $entry !== ".." && $entry !== ".DS_Store") {
-            $movies[] = $entry;
+        if ($entry !== "." 
+            && $entry !== ".." 
+            && $entry !== ".DS_Store"
+            && !ends_with($entry, ".srt")) {
+                $movies[] = $entry;
         }
     }
     $d->close();
@@ -83,5 +90,4 @@ function pipe_char_to_fifo($char, $pipe) {
     // http://www.raspberrypi.org/phpBB3/viewtopic.php?t=33117
     $out = `echo -n "$char" > $pipe`;
 }
-?>
 
