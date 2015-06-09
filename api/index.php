@@ -33,7 +33,7 @@ $app = new \Slim\Slim();
 // Main program starts here
 $pipe = dirname(__FILE__) . "/../fifo";
 $sound_setting_file = dirname(__FILE__) . "/../sound_setting";
-$basedir = "/media/usb/videos";
+$basedir = "/home/pi/movies";
 
 $get_disk = function () {
 	$response = [
