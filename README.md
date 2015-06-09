@@ -10,7 +10,12 @@ Installation
 ------------
 
 It requires the "www-data" user to be part of the "video" and "audio"
-groups, as defined in "/etc/group".
+groups, as defined in "/etc/group":
+
+    ...
+    audio:x:29:pi,www-data
+    video:x:44:pi,www-data
+    ...
 
 The pipe "fifo" is located in the same folder as this script; it was
 created using the commands:
@@ -20,4 +25,7 @@ created using the commands:
 
 This pipe is used to send commands to the running instance of omxplayer,
 just as if the user was typing those commands on the command line.
+
+Finally, it is required to `chmod 777 movies` to enable the correct execution
+of the script.
 
