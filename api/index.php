@@ -89,8 +89,9 @@ $post_play_movie = function ($movie) use ($basedir, $sound_setting_file, $pipe) 
     $movies = get_movie_list($basedir);
     if ($movie && in_array($movie, $movies)) {
         $sound = load_sound_setting($sound_setting_file);
-        start_movie_playback($movie, $basedir, $pipe, $sound);
+        $command = start_movie_playback($movie, $basedir, $pipe, $sound);
         $response = [
+            "command" => $command,
             "method" => "play",
             "response" => $movie,
             "sound" => $sound

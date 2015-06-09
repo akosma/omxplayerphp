@@ -32,8 +32,8 @@ function get_movie_list($basedir) {
     $movies = array();
     $d = dir($basedir);
     while (false !== ($entry = $d->read())) {
-        if ($entry !== "." 
-            && $entry !== ".." 
+        if ($entry !== "."
+            && $entry !== ".."
             && $entry !== ".DS_Store"
             && !ends_with($entry, ".srt")) {
                 $movies[] = $entry;
@@ -71,7 +71,7 @@ function load_sound_setting($sound_setting_file) {
 }
 
 function start_movie_playback($movie, $basedir, $pipe, $sound) {
-    $output = "omxplayer -o $sound \"$basedir/$movie\" <$pipe &";
+    $command = "omxplayer -o $sound \"$basedir/$movie\" <$pipe &";
 
     $descriptorspec = array(
         0 => array("pipe", "r"),  // stdin
@@ -79,10 +79,20 @@ function start_movie_playback($movie, $basedir, $pipe, $sound) {
         2 => array("pipe", "w"),  // stderr
     );
 
-    $process = proc_open($output, $descriptorspec, $pipes, dirname(__FILE__), null);
+    $process = proc_open($command, $descriptorspec, $pipes, dirname(__FILE__), null);
 
     // Trigger the playback now (this is weird)
     $out = `echo -n "." > $pipe`;
+
+    // At the time of this fix, the current version of omxplayer
+    // has a weird bug; it starts videos at "Playspeed:2.000" but
+    // this can be solved by hitting play, and then requesting a
+    // slower speed; these two commands are executed below, in sequence.
+    // See the comment by "cookdoeyl" at the end of this page:
+    // https://www.raspberrypi.org/forums/viewtopic.php?f=35&t=15947&p=767551
+    $out = `echo -n "p" > $pipe`;
+    $out = `echo -n "1" > $pipe`;
+    return $command;
 }
 
 function pipe_char_to_fifo($char, $pipe) {
