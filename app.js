@@ -87,7 +87,7 @@ $(document).on('pageinit', '#main', function() {
 
 $(document).on('pageinit', '#detail', function () {
     var commands = ['pause', 'volup', 'voldown', 'backward', 'forward',
-                    'backward10', 'forward10', 'slower', 'faster', 'info'];
+                    'backward10', 'forward10', 'slower', 'faster', 'info', 'subtitles'];
     var createCommandHandler = function(command) {
         return function (event) {
             MoviePlayer.sendCommand(command);

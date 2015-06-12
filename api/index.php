@@ -120,7 +120,8 @@ $post_command_action = function ($action) use ($pipe, $sound_setting_file) {
             "faster" =>     "2",
             "slower" =>     "1",
             "volup" =>      "+",
-            "voldown" =>    "-"
+            "voldown" =>    "-",
+            "subtitles" =>  "s"
         ];
         if ($action && array_key_exists($action, $chars)) {
             $char = $chars[$action];
