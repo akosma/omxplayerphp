@@ -1,13 +1,18 @@
-Driving omxplayer through PHP on a Raspberry Pi
-===============================================
+# Driving omxplayer through PHP on a Raspberry Pi
+
+## IMPORTANT NOTICE
+
+This project is abandoned, please check [omxplayernode][omxplayernode]
+and [omxplayerios][omxplayerios] instead.
+
+## Introduction
 
 This script allows to start and stop the playback of a list of movies in
 a Raspberry Pi computer, using lighttpd as a web server and the PHP
 package. It displays a mobile-friendly user interface, so that you can
 use your smartphone or tablet to control the playback.
 
-Installation
-------------
+## Installation
 
 It requires the "www-data" user to be part of the "video" and "audio"
 groups, as defined in "/etc/group":
@@ -28,4 +33,7 @@ just as if the user was typing those commands on the command line.
 
 Finally, it is required to `chmod 777 movies` to enable the correct execution
 of the script.
+
+[omxplayernode]:https://github.com/akosma/omxplayernode
+[omxplayerios]:https://github.com/akosma/omxplayerios
 
